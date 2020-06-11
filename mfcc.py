@@ -5,7 +5,6 @@ import math
 import decimal
 import os
 import csv
-from sklearn.preprocessing import StandardScaler
 
 
 def magspec(frames, NFFT):
@@ -123,19 +122,25 @@ def lifter(cepstra, L=22):
 
 
 if __name__ == '__main__':
-    LABELED_DATA_PATH = 'sound/data/'
-    RESULT_CSV_PATH = 'sound/mfcc.csv'
+    # LABELED_DATA_PATH = 'sound/data/'
+    # RESULT_CSV_PATH = 'sound/mfcc.csv'
+    # 어반 사운드로 재시도, 20200611 이수균
+    LABELED_DATA_PATH = 'urban_sound/data/'
+    RESULT_CSV_PATH = 'urban_sound/mfcc.csv'
 
     csv_list = []
 
     for label in os.listdir(LABELED_DATA_PATH):
+        if not os.path.isdir(LABELED_DATA_PATH + label):  # 예외 처리, 디렉토리가 아니면 터짐
+            continue
+
         for wav_filename in os.listdir(LABELED_DATA_PATH + label):
             if not wav_filename.endswith('.wav'):
                 continue
 
+            # TODO : 샘플 플로팅 대략 4~8개 할 것. 위치 result_plot/mfcc-sample.png
             sample_rate, data = wav.read(LABELED_DATA_PATH + label + '/' + wav_filename)
-            mfcc_array = StandardScaler().fit_transform(mfcc(data, sample_rate))
-            mfcc_array = np.ravel(mfcc_array)
+            mfcc_array = np.ravel(mfcc(data, sample_rate))  # 여기가 스케일러자리가 아님 스케일러 삭제
             mfcc_array = np.append(mfcc_array, [int(label)]).tolist()
 
             csv_list.append(mfcc_array)
