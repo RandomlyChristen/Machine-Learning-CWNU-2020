@@ -5,6 +5,8 @@ import math
 import decimal
 import os
 import csv
+import matplotlib.pyplot as plt
+import librosa.display
 
 
 def magspec(frames, NFFT):
@@ -103,6 +105,7 @@ def mel2hz(mel):
 def mfcc(signal, samplerate=16000):
     nfft = calculate_nfft(samplerate, 0.025)
     print('nfft', nfft)
+    # 0.025 (winlen: 분석 길이 0.025), 0.01 (winstep), nfilter (26)
     feat, energy = fbank(signal, samplerate, 0.025, 0.01, 26, nfft, 0, None, 0.97, lambda x: np.ones((x,)))
     feat = np.log(feat)
     # 로그가 취해진 Filter Bank 에너지에 DCT를 계산한다. 이유는 두가지 Filter Bank는 모두 Overlapping 되어 있기 때문에 Filter Bank
@@ -121,12 +124,21 @@ def lifter(cepstra, L=22):
     return lift * cepstra
 
 
+def mfcc_subplot(data, title='MFCC'):
+    librosa.display.specshow(data, x_axis='time')
+    plt.colorbar()
+    plt.title(title)
+    plt.tight_layout()
+
+
 if __name__ == '__main__':
     # LABELED_DATA_PATH = 'sound/data/'
     # RESULT_CSV_PATH = 'sound/mfcc.csv'
     # 어반 사운드로 재시도, 20200611 이수균
     LABELED_DATA_PATH = 'urban_sound/data/'
     RESULT_CSV_PATH = 'urban_sound/mfcc.csv'
+    RESULT_PLOT_MFCC_d_sound = 'result_plot/MFCC/0'
+    RESULT_PLOT_MFCC_s_sound = 'result_plot/MFCC/1'
 
     csv_list = []
 
@@ -135,10 +147,29 @@ if __name__ == '__main__':
             continue
 
         for wav_filename in os.listdir(LABELED_DATA_PATH + label):
+            print('label',label)
             if not wav_filename.endswith('.wav'):
                 continue
 
             # TODO : 샘플 플로팅 대략 4~8개 할 것. 위치 result_plot/mfcc-sample.png
+            # sample_rate, data = wav.read(LABELED_DATA_PATH + label + '/' + wav_filename)
+            # wav_filename_split = os.path.splitext(wav_filename)[0]
+            # print(data.shape)
+            # if label == '0':
+            #     plt.figure(figsize=(10, 4))
+            #     librosa.display.specshow(mfcc(data, sample_rate), x_axis='time')
+            #     plt.colorbar()
+            #     plt.title('MFCC')
+            #     plt.tight_layout()
+            #     plt.savefig(RESULT_PLOT_MFCC_d_sound + '/' + wav_filename_split + '.png')
+            # elif label == '1':
+            #     plt.figure(figsize=(10, 4))
+            #     librosa.display.specshow(mfcc(data, sample_rate), x_axis='time')
+            #     plt.colorbar()
+            #     plt.title('MFCC')
+            #     plt.tight_layout()
+            #     plt.savefig(RESULT_PLOT_MFCC_s_sound + '/' + wav_filename_split + '.png')
+
             sample_rate, data = wav.read(LABELED_DATA_PATH + label + '/' + wav_filename)
             mfcc_array = np.ravel(mfcc(data, sample_rate))  # 여기가 스케일러자리가 아님 스케일러 삭제
             mfcc_array = np.append(mfcc_array, [int(label)]).tolist()
