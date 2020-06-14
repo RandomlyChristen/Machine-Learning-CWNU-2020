@@ -12,7 +12,7 @@ from imblearn.over_sampling import RandomOverSampler
 from sklearn.utils.class_weight import compute_class_weight
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
-
+from learning_curve import save_learning_curve
 
 CSV_FILE_PATH = 'urban_sound/mfcc.csv'  # 어반 사운드로 재시
 MODEL_OUTPUT_PATH = 'models/model_urban_sound-class_weight_%.1f%%.joblib'
@@ -40,10 +40,10 @@ y = y.astype(np.int16)
 
 # 두 클래스간 데이터 수가 일치하지 않음, 확률에 의존하는 영향을 배제하기 위해,
 # TODO-1 언더샘플링 : 우세한 클래스의 데이터를 무작위로 제거
-# X, y = RandomUnderSampler(random_state=999).fit_sample(X, y)
+X, y = RandomUnderSampler(random_state=999).fit_sample(X, y)
 
 # TODO-2 오버샘플링 : 열등한 클래스의 데이터를 중복
-X, y = RandomOverSampler(random_state=999).fit_sample(X, y)
+# X, y = RandomOverSampler(random_state=999).fit_sample(X, y)
 
 before_pca = X.shape[1]
 
@@ -70,9 +70,7 @@ X = scaler.fit_transform(X)
 # Priors = np.logspace(-2, 10, 13)
 Var_smoothing = np.logspace(-9, 3, 13)
 
-
 param_grid = dict(var_smoothing=Var_smoothing)
-
 
 skf = StratifiedKFold(n_splits=10)
 
@@ -82,6 +80,9 @@ nb2.fit(X, y)
 print(nb2.best_params_['var_smoothing'])
 
 print('베스트 파라미터 : %s, 점수 %0.2f' % (nb2.best_params_, nb2.best_score_))
-# 모델 출력
-dump(nb2.best_estimator_, 'models/bayes_classifier/gaussianNB@OverSamplering@score-%0.2f.joblib' % nb2.best_score_)
 
+save_learning_curve(nb2.best_estimator_, X, y,
+                    'result_plot/bayes_classifier/learning-curve_UnderSamplering.png', random_state=999)
+
+# 모델 출력
+dump(nb2.best_estimator_, 'models/bayes_classifier/gaussianNB@UnderSamplering@score-%0.2f.joblib' % nb2.best_score_)

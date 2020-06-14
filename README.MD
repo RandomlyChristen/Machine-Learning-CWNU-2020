@@ -178,3 +178,75 @@ Over Sampling
 
 ![오버샘플그리드](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/grid-validation_weighted%40none-C%4010.000000-gamma%400.001000-score%400.969781.png)
 ![오버샘플러닝커브](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/learning-curve_weighted%40none-C%4010.000000-gamma%400.001000-score%400.969781.png)
+
+
+<a id='gaussianNB'></a>
+## Naive Bayes Classification
+나이브 베이즈는 특정 자료가 여러 가지 속성을 가지고 있을 때 그 속성들 사이의 독립을 가정하는 베이즈 정리를 기반으로 한다.
+
+## Bayes theorem
+* 1740년대 토마스 베이즈(Thomas Bayes)가 정립한 조건부 확률에 대한 수학적 정리
+
+  1. 베이즈 정리는 베이즈 룰(Bayes Rule), 베이즈 법칙(Bayes Law)으로도 불림
+
+* 두 확률 변수의 사전 확률과 사후 확률 사이의 관계를 나타내는 정리
+ 
+  1. 사전 확률의 정보를 이용해 사후 확률을 추정 
+  
+* 사전 확률(Prior probabilty): 가지고 있는 정보를 기초로 정한 초기 확률
+
+* 사후 확률(Posterior probabilty): 결과가 발생했다는 조건에서 어떤 원인이 발생했을 확률
+
+* 우도(Likelihood): 원인이 발생했다는 조건에서 결과가 발생했을 확률
+
+* 베이즈 정리의 공식
+
+    ![베이즈정리공식](https://www.google.com/imgres?imgurl=https%3A%2F%2Fraw.githubusercontent.com%2Fangeloyeo%2Fangeloyeo.github.io%2Fmaster%2Fpics%2F2020-01-09-Bayes_rule%2Fpic1.png&imgrefurl=https%3A%2F%2Fangeloyeo.github.io%2F2020%2F01%2F09%2FBayes_rule.html&tbnid=q-Htp3GyeAtO_M&vet=12ahUKEwiszouu7oDqAhVxxYsBHWKUC1AQMygJegUIARCoAQ..i&docid=mdMABlMyy8kALM&w=1030&h=491&q=%EB%B2%A0%EC%9D%B4%EC%A6%88%20%EC%A0%95%EB%A6%AC%20%EA%B3%B5%EC%8B%9D&ved=2ahUKEwiszouu7oDqAhVxxYsBHWKUC1AQMygJegUIARCoAQ)
+
+H를 사건의 원인, E를 결과로 가정했을 경우에 P(H)는 원인이 발생할 확률인 원인의 사전확률을 의미하고, P(E)는 결과가 발생할 확률인 결과의 사전확률을 의미한다.
+P(E|H)는 원인이 발생했다는 조건에서 결과가 발생할 확률로 우도를 의미합니다. 반대로 P(H|E)는 결과가 발생했다는 조건에서 원인이 발생했을 확률로서 이것이 사후 확률입니다.
+
+## GaussianNB
+
+MFCC 및 PCA 된 데이터의 모든 특성을 가지고 위험 또는 안전 소리로 이진 분류기를 설계함.
+
+사용한 데이터는 `urban_sound`의 1287차원의 MFCC이다. 내부적으로 PCA를 적용하고 있으며, PCA로 인한
+재구성 오차는 10%이다.
+
+```python
+predictor = ReduceImbalancedPredictor(n_components=0.9, sampling=clf_params['sampling'], random_state=999)
+``` 
+
+`Var_smoothing`에 대하여 Validation Curve를 진행했으며, 범위는 아래와 같다.
+```python
+# 아래 범위에 대한 Validation Curve를 진행
+Var_smoothing = np.logspace(-9, 3, 13)
+```
+
+K-Fold 교차검증을 통해 Validation Accuracy를 계산하며, K는 10이다.
+```python
+# 모든 Validation Curve의 밸리데이션은 K-Fold 로 진행
+skf = StratifiedKFold(n_splits=10)
+``` 
+
+####결과 
+Default ,Under-Sampling 방식, Over-Sampling 방식의 경우에 대해 반복을 진행했으며,
+이에 최고점수 파라미터 모델의 러닝커브를 출력하였다.
+
+Default 
+
+   ![Normal러닝커브](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/bayes_classifier/learning-curve_.png)
+
+***
+
+Under Sampling
+ 
+   ![언더샘플러닝커브](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/bayes_classifier/learning-curve_UnderSamplering.png)
+
+***
+
+Over Sampling
+
+   ![오버샘플러닝커브](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/bayes_classifier/learning-curve_OverSamplering.png)
+
+
