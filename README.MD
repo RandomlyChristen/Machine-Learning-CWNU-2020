@@ -233,6 +233,7 @@ skf = StratifiedKFold(n_splits=10)
 Default ,Under-Sampling 방식, Over-Sampling 방식의 경우에 대해 반복을 진행했으며,
 이에 최고점수 파라미터 모델의 러닝커브를 출력하였다.
 
+
 Default 
 
    ![Normal러닝커브](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/bayes_classifier/learning-curve_.png)
