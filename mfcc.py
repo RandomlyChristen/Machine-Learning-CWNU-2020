@@ -102,7 +102,7 @@ def mel2hz(mel):
     return 700 * (10 ** (mel / 2595.0) - 1)
 
 
-def mfcc(signal, samplerate=16000):
+def mfcc(signal, samplerate=44100):
     nfft = calculate_nfft(samplerate, 0.025)
     print('nfft', nfft)
     # 0.025 (winlen: 분석 길이 0.025), 0.01 (winstep), nfilter (26)
