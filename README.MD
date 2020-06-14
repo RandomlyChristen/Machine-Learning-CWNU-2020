@@ -201,7 +201,7 @@ Over Sampling
 
 * 베이즈 정리의 공식
 
-    ![베이즈정리공식](https://www.google.com/imgres?imgurl=https%3A%2F%2Fraw.githubusercontent.com%2Fangeloyeo%2Fangeloyeo.github.io%2Fmaster%2Fpics%2F2020-01-09-Bayes_rule%2Fpic1.png&imgrefurl=https%3A%2F%2Fangeloyeo.github.io%2F2020%2F01%2F09%2FBayes_rule.html&tbnid=q-Htp3GyeAtO_M&vet=12ahUKEwiszouu7oDqAhVxxYsBHWKUC1AQMygJegUIARCoAQ..i&docid=mdMABlMyy8kALM&w=1030&h=491&q=%EB%B2%A0%EC%9D%B4%EC%A6%88%20%EC%A0%95%EB%A6%AC%20%EA%B3%B5%EC%8B%9D&ved=2ahUKEwiszouu7oDqAhVxxYsBHWKUC1AQMygJegUIARCoAQ)
+    ![베이즈정리공식](https://raw.githubusercontent.com/angeloyeo/angeloyeo.github.io/master/pics/2020-01-09-Bayes_rule/pic1.png)
 
 H를 사건의 원인, E를 결과로 가정했을 경우에 P(H)는 원인이 발생할 확률인 원인의 사전확률을 의미하고, P(E)는 결과가 발생할 확률인 결과의 사전확률을 의미한다.
 P(E|H)는 원인이 발생했다는 조건에서 결과가 발생할 확률로 우도를 의미합니다. 반대로 P(H|E)는 결과가 발생했다는 조건에서 원인이 발생했을 확률로서 이것이 사후 확률입니다.
