@@ -161,17 +161,20 @@ Class Weight 방식, Under-Sampling 방식, Over-Sampling 방식의 경우에 �
 이에 그리드서치 결과와 최고점수 파라미터 모델의 러닝커브를 출력하였다.
 
 Class Weight:0.918976
+
 ![클래스가중치그리드](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/grid-validation_weighted%40balanced-C%401.000000-gamma%400.001000-score%400.918976.png)
 ![클래스가중치러닝커브](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/learning-curve_weighted%40balanced-C%401.000000-gamma%400.001000-score%400.918976.png)
 
 ***
 
-Under Sampling 
+Under Sampling
+ 
 ![언더샘플그리드](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/grid-validation_weighted%40none-C%401.000000-gamma%400.001000-score%400.866984.png)
 ![언더샘플러닝커브](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/learning-curve_weighted%40none-C%401.000000-gamma%400.001000-score%400.866984.png)
 
 ***
 
 Over Sampling
+
 ![오버샘플그리드](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/grid-validation_weighted%40none-C%4010.000000-gamma%400.001000-score%400.969781.png)
 ![오버샘플러닝커브](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/learning-curve_weighted%40none-C%4010.000000-gamma%400.001000-score%400.969781.png)
