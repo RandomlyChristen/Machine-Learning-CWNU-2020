@@ -53,7 +53,7 @@
 
 1. [SVC를 이용한 분류](#svc)
 
-1. [나이브 베이지안 분류](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020)
+1. [나이브 베이지안 분류](#gaussianNB)
 
 1. [라즈베리파이 데모](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020)
 
@@ -156,7 +156,7 @@ K-Fold 교차검증을 통해 Validation Accuracy를 계산하며, K는 5이다.
 cv = KFold(5, shuffle=True, random_state=777)
 ``` 
 
-####결과 
+### 결과 
 Class Weight 방식, Under-Sampling 방식, Over-Sampling 방식의 경우에 대해 반복을 진행했으며,
 이에 그리드서치 결과와 최고점수 파라미터 모델의 러닝커브를 출력하였다.
 
@@ -167,24 +167,30 @@ Class Weight:0.918976
 
 ***
 
-Under Sampling
+Under Sampling:0.866984
  
 ![언더샘플그리드](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/grid-validation_weighted%40none-C%401.000000-gamma%400.001000-score%400.866984.png)
 ![언더샘플러닝커브](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/learning-curve_weighted%40none-C%401.000000-gamma%400.001000-score%400.866984.png)
 
 ***
 
-Over Sampling
+Over Sampling:0.969781
 
 ![오버샘플그리드](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/grid-validation_weighted%40none-C%4010.000000-gamma%400.001000-score%400.969781.png)
 ![오버샘플러닝커브](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/learning-curve_weighted%40none-C%4010.000000-gamma%400.001000-score%400.969781.png)
 
+Random Prediction
+
+![무작위예측 1](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/predict_result/0.png)
+![무작위예측 2](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/predict_result/4.png)
+![무작위예측 3](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/predict_result/7.png)
+![무작위예측 4](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/predict_result/9.png)
 
 <a id='gaussianNB'></a>
 ## Naive Bayes Classification
 나이브 베이즈는 특정 자료가 여러 가지 속성을 가지고 있을 때 그 속성들 사이의 독립을 가정하는 베이즈 정리를 기반으로 한다.
 
-## Bayes theorem
+### Bayes theorem
 * 1740년대 토마스 베이즈(Thomas Bayes)가 정립한 조건부 확률에 대한 수학적 정리
 
   1. 베이즈 정리는 베이즈 룰(Bayes Rule), 베이즈 법칙(Bayes Law)으로도 불림
@@ -206,7 +212,7 @@ Over Sampling
 H를 사건의 원인, E를 결과로 가정했을 경우에 P(H)는 원인이 발생할 확률인 원인의 사전확률을 의미하고, P(E)는 결과가 발생할 확률인 결과의 사전확률을 의미한다.
 P(E|H)는 원인이 발생했다는 조건에서 결과가 발생할 확률로 우도를 의미합니다. 반대로 P(H|E)는 결과가 발생했다는 조건에서 원인이 발생했을 확률로서 이것이 사후 확률입니다.
 
-## GaussianNB
+### GaussianNB
 
 MFCC 및 PCA 된 데이터의 모든 특성을 가지고 위험 또는 안전 소리로 이진 분류기를 설계함.
 
@@ -214,7 +220,10 @@ MFCC 및 PCA 된 데이터의 모든 특성을 가지고 위험 또는 안전 �
 재구성 오차는 10%이다.
 
 ```python
-predictor = ReduceImbalancedPredictor(n_components=0.9, sampling=clf_params['sampling'], random_state=999)
+PCA_N_COMPONENTS_RATE = 0.9
+...
+pca = PCA(n_components=PCA_N_COMPONENTS_RATE)
+X = pca.fit_transform(X)
 ``` 
 
 `Var_smoothing`에 대하여 Validation Curve를 진행했으며, 범위는 아래와 같다.
@@ -229,7 +238,7 @@ K-Fold 교차검증을 통해 Validation Accuracy를 계산하며, K는 10이다
 skf = StratifiedKFold(n_splits=10)
 ``` 
 
-####결과 
+### 결과 
 Default ,Under-Sampling 방식, Over-Sampling 방식의 경우에 대해 반복을 진행했으며,
 이에 최고점수 파라미터 모델의 러닝커브를 출력하였다.
 
