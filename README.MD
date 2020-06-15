@@ -55,7 +55,7 @@
 
 1. [나이브 베이지안 분류](#gaussianNB)
 
-1. [라즈베리파이 데모](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020)
+1. [라즈베리파이 데모](https://youtu.be/KzSQpZFKlXg)
 
 
 <a id='pre-process'></a>
