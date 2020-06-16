@@ -81,10 +81,10 @@ def mfcc(signal, samplerate=44100):
     return feat
 ```
 
-* PCA : 1초 wav(44100)의 0.025배 Windowed된 MFCC는 (99, 13) 총, 1287 차원을 가지게 된다.
+* PCA : 1초 wav(44100Hz)의 0.025배 Windowed된 MFCC는 (99, 13) 총, 1287 차원을 가지게 된다.
 해당 차원을 모두 사용하는 것은 "차원의 저주"로 인한 모델의 불필요한 복잡성을 증가시키게 된다.
 데이터에 대한 선형대수적 접근에서 유도되는 PCA 분석을 통해 재구성 오차 10%의 
-차원압축을 진행하면 약 100개의 차원으로 수렴한다.
+차원압축을 진행하면 약 100개의 차원으로 수렴한다. (다음 사진은 왼쪽:데이터 오른쪽:PCA의 inv-PCA)
 
 ![차원축소](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/reduce-svc/predict_result/0.png)
 
@@ -129,6 +129,8 @@ parameter_cases = [
     )
 ]
 ```
+
+![언더샘플링](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/random_under_sampled.png)
 
 
 <a id='svc'></a>
@@ -210,7 +212,7 @@ Random Prediction
     ![베이즈정리공식](https://raw.githubusercontent.com/angeloyeo/angeloyeo.github.io/master/pics/2020-01-09-Bayes_rule/pic1.png)
 
 H를 사건의 원인, E를 결과로 가정했을 경우에 P(H)는 원인이 발생할 확률인 원인의 사전확률을 의미하고, P(E)는 결과가 발생할 확률인 결과의 사전확률을 의미한다.
-P(E|H)는 원인이 발생했다는 조건에서 결과가 발생할 확률로 우도를 의미합니다. 반대로 P(H|E)는 결과가 발생했다는 조건에서 원인이 발생했을 확률로서 이것이 사후 확률입니다.
+P(E|H)는 원인이 발생했다는 조건에서 결과가 발생할 확률로 우도를 의미합니다. 반대로 P(H|E)는 결과가 발생했다는 조건에서 원인이 발생했을 확률로서 이것이 사후 확률이다.
 
 ### GaussianNB
 
@@ -260,3 +262,51 @@ Over Sampling
    ![오버샘플러닝커브](https://github.com/RandomlyChristen/Machine-Learning-CWNU-2020/blob/master/result_plot/bayes_classifier/learning-curve_OverSamplering.png)
 
 
+<a id='youtube'></a>
+## 라즈베리파이 데모
+`pyaudio`의 마이크 스트림을 사용하여, 0.5초마다 지난 0.5와 합하여 1초의 데이터를 만들어 사용.
+
+```python
+    def generator(self, out_size):
+        prev_chuck = np.empty(self._chunk, dtype=np.int16)
+
+        while not self.closed:
+            current_chunk = self._buff.get()
+            if current_chunk is None:
+                continue
+
+            current_chunk = np.frombuffer(current_chunk, dtype=np.int16)
+            appended = np.append(prev_chuck, current_chunk)
+
+            if len(appended) >= out_size:
+                yield appended[:out_size]
+                prev_chuck = appended[self._chunk:]
+            else:
+                prev_chuck = appended
+...
+    with MicStream(44100, 22050) as stream:
+        audio_generator = stream.generator(out_size=44100)
+```
+
+최고점수 모델인 SVC, 오버샘플링과 C:10, gamma:0.001, score:0.97을 load하여 사용.
+
+예측을 통해, DANGER 또는 SAFE 를 출력함.
+```python
+    predictor: ReduceImbalancedPredictor = load('weighted@none-C@10.000000-gamma@0.001000-score@0.969781.joblib')
+
+    with MicStream(44100, 22050) as stream:
+        audio_generator = stream.generator(out_size=44100)
+
+        for x in audio_generator:
+            data = np.ravel(mfcc(x, 44100)).reshape(1, 1287)
+            data = predictor.data_transform(data)
+            pred = predictor.predict(data)
+            if pred[0] == 1:
+                print('SAFE')
+            else:
+                print('DANGER', file=sys.stderr)
+
+```
+
+### YouTube
+[![썸네일](https://img.youtube.com/vi/KzSQpZFKlXg/0.jpg)](https://youtu.be/KzSQpZFKlXg)
